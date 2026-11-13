@@ -9,8 +9,7 @@ DOMAIN: Final = "huawei_health"
 PLATFORMS: Final = ["sensor"]
 
 # ── protocol ─────────────────────────────────────────────────────────────
-# The Health app's own cloud. One host per GRS country group; the RU one is what the
-# account's app talks to, and every group answers for any client (verified live).
+# Huawei Health regional data API hosts.
 APP_HOSTS: Final = (
     "https://sportdata-drru.things.dbankcloud.ru",
     "https://sportdata-dre.things.dbankcloud.com",
@@ -18,8 +17,7 @@ APP_HOSTS: Final = (
     "https://healthdata.dbankcloud.cn",
 )
 
-# Token issuing/rotation lives on a different controller than the data (GRS key
-# domainHealthCloudCommon).
+# Session API hosts.
 SESSION_HOSTS: Final = (
     "https://healthcommon-drru.things.dbankcloud.ru",
     "https://healthcommon-dre.things.dbankcloud.com",
@@ -31,14 +29,14 @@ OBTAIN_PATH: Final = "/commonAbility/userAccessToken/obtain"
 REFRESH_PATH: Final = "/commonAbility/userAccessToken/refresh"
 QUERY_PATH: Final = "/commonAbility/userAccessToken/query"
 
-# The app id the token pair is minted for - com.huawei.health.BuildConfig.HMS_APPLICATION_ID.
+# Application identifier for the authentication flow.
 # It is a *number*, not the package name, and a code traded with the wrong one is refused.
 HMS_APP_ID: Final = "10414141"
 APP_ID: Final = "com.huawei.health"
 TOKEN_TYPE: Final = 2
-# x-version is "and_health_" + versionName of the Health release the protocol came from.
+# API client compatibility version.
 APP_VERSION: Final = "and_health_16.1.6.320"
-# ThirdLoginDataStorageUtil.REFRESH_TOKEN_INTERVAL, in seconds.
+# Refresh token lifetime, in seconds.
 REFRESH_TOKEN_TTL: Final = 180 * 24 * 3600
 # The access token lives tens of minutes; rotate ahead of the wall instead of on a failure.
 TOKEN_LIVE_SLACK: Final = 120
@@ -64,7 +62,9 @@ READ_PATHS: Final = {
 HEALTH_TYPES: Final = {7: "heart_rate", 9: "professional_sleep", 11: "stress",
                        12: "exercise_intensity"}
 # sportTypes for the *ByTime endpoints. 5 is the phone/band's automatic minute-by-minute
-# walking track (it covers the whole day, so it is not a workout), 6/7/8 are sleep segments.
+# walking track (it covers the whole day, so it is not treated as a workout).
+# The sport type meanings and exclusions are not verified against the app; do not
+# confuse these identifiers with the separate health/sleep data type identifiers.
 # 14 shows up in the data but the app never names it, so it reads as unknown.
 SPORT_TYPES: Final = {1: "stairs", 2: "hill", 3: "cycling", 4: "running", 5: "walking",
                       6: "deep_sleep", 7: "light_sleep", 8: "awake", 9: "swimming",

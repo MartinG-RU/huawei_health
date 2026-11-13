@@ -14,8 +14,12 @@ CLOUD_URL = "https://health.cloud.huawei.com"
 class HuaweiHealthEntity(CoordinatorEntity[HuaweiHealthCoordinator]):
     """One account is one service device; every sensor of it hangs off that device."""
 
-    # Disable entity naming to avoid area prefix in entity_id
-    _attr_has_entity_name = False
+    # Entity naming must stay ON: Home Assistant only resolves translation_key
+    # against the user's language while has_entity_name is true (see
+    # Entity._name_internal). Turning it off - as an earlier revision did to keep
+    # entity_ids short - silently pins every name to the English literal in the
+    # sensor description instead of translations/*.json.
+    _attr_has_entity_name = True
 
     def __init__(self, data: HuaweiHealthData) -> None:
         super().__init__(data.coordinator)

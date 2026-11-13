@@ -1,0 +1,8 @@
+{
+  "package": "public-no-strava",
+  "version": "1.0.19",
+  "upstream": "and7ey/huawei_health",
+  "local_build": true,
+  "live_validation_complete": false,
+  "contains_user_credentials": false
+}

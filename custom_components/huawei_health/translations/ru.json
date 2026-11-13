@@ -35,14 +35,14 @@
           "update_interval": "Интервал опроса, минут",
           "history_days": "Сколько дней суточных данных держать",
           "workout_days": "За сколько дней искать тренировки",
-          "enable_workouts": "Опрашивать тренировки (getSportsDataByTime)",
+          "enable_workouts": "Опрашивать записанные тренировки (MotionPath)",
           "enable_health_metrics": "Опрашивать пульс, сон и стресс (getHealthStat)",
           "device_code": "deviceCode конкретного устройства (0 — весь аккаунт)"
         },
         "data_description": {
           "update_interval": "Чаще 5 минут смысла нет: облако приложения обновляется синхронизацией с часами или телефоном.",
           "history_days": "Влияет на суточные сенсоры и на количество запросов: окно до 30 дней остаётся одним запросом.",
-          "workout_days": "Тренировки берутся окнами по 10 дней (жесточающий лимит облака), поэтому 30 дней — это три запроса.",
+          "workout_days": "Записанные тренировки из MotionPath; длинная история может быть неполной.",
           "device_code": "Список deviceCode отдаёт /profile/device/getBindDevice. Если указать устройство часов, суточные суммы придут только по нему.",
           "enable_workouts": "Отключи, если часами не пользуешься: уберёт самый медленный запрос.",
           "enable_health_metrics": "Отключи, если нет устройства, измеряющего пульс или сон."
@@ -52,29 +52,81 @@
   },
   "entity": {
     "sensor": {
-      "steps": { "name": "Шаги за день" },
-      "distance": { "name": "Дистанция за день" },
-      "calories": { "name": "Калории за день" },
-      "activity_duration": { "name": "Активность за день" },
-      "walking_duration": { "name": "Ходьба за день" },
-      "active_hours": { "name": "Активные часы за день" },
-      "moderate_high_intensity_minutes": { "name": "Интенсивные минуты за день" },
-      "step_goal": { "name": "Цель по шагам" },
-      "resting_heart_rate": { "name": "Пульс покоя" },
-      "heart_rate": { "name": "Пульс" },
-      "max_heart_rate": { "name": "Максимальный пульс за день" },
-      "min_heart_rate": { "name": "Минимальный пульс за день" },
-      "sleep_duration": { "name": "Сон" },
-      "sleep_deep": { "name": "Глубокий сон" },
-      "sleep_rem": { "name": "Сновидения (REM)" },
-      "sleep_light": { "name": "Поверхностный сон" },
-      "sleep_awake": { "name": "Бодрствование во сне" },
-      "sleep_score": { "name": "Оценка сна" },
-      "sleep_efficiency": { "name": "Эффективность сна" },
-      "sleep_hrv": { "name": "ВСР во сне" },
-      "sleep_spo2": { "name": "SpO2 во сне" },
-      "stress": { "name": "Стресс" },
-      "stress_last": { "name": "Стресс (последнее измерение)" },
+      "steps": {
+        "name": "Шаги за день"
+      },
+      "distance": {
+        "name": "Дистанция за день"
+      },
+      "calories": {
+        "name": "Калории за день"
+      },
+      "activity_duration": {
+        "name": "Активность за день, минут"
+      },
+      "walking_duration": {
+        "name": "Ходьба за день, минут"
+      },
+      "active_hours": {
+        "name": "Активные часы за день"
+      },
+      "moderate_high_intensity_minutes": {
+        "name": "Интенсивные минуты за день"
+      },
+      "step_goal": {
+        "name": "Цель по шагам"
+      },
+      "resting_heart_rate": {
+        "name": "Пульс покоя"
+      },
+      "heart_rate": {
+        "name": "Пульс"
+      },
+      "max_heart_rate": {
+        "name": "Максимальный пульс за день"
+      },
+      "min_heart_rate": {
+        "name": "Минимальный пульс за день"
+      },
+      "sleep_duration": {
+        "name": "Сон, минут"
+      },
+      "sleep_deep": {
+        "name": "Глубокий сон, минут"
+      },
+      "sleep_rem": {
+        "name": "Сновидения (REM), минут"
+      },
+      "sleep_light": {
+        "name": "Поверхностный сон, минут"
+      },
+      "sleep_awake": {
+        "name": "Бодрствование во сне, минут"
+      },
+      "sleep_score": {
+        "name": "Оценка сна"
+      },
+      "sleep_efficiency": {
+        "name": "Эффективность сна"
+      },
+      "sleep_hrv": {
+        "name": "ВСР во сне"
+      },
+      "sleep_spo2": {
+        "name": "SpO2 во сне"
+      },
+      "fall_asleep": {
+        "name": "Засыпание"
+      },
+      "wakeup": {
+        "name": "Пробуждение"
+      },
+      "stress": {
+        "name": "Стресс"
+      },
+      "stress_last": {
+        "name": "Стресс (последнее измерение)"
+      },
       "last_activity": {
         "name": "Последняя тренировка",
         "state": {
@@ -91,11 +143,51 @@
           "unknown": "Неизвестный тип"
         }
       },
-      "last_activity_duration": { "name": "Длительность последней тренировки" },
-      "last_activity_distance": { "name": "Дистанция последней тренировки" },
-      "last_activity_calories": { "name": "Калории последней тренировки" },
-      "workouts": { "name": "Тренировок за период" },
-      "relogin_in": { "name": "Повторный вход через, дней" }
+      "last_activity_duration": {
+        "name": "Длительность последней тренировки, минут"
+      },
+      "last_activity_distance": {
+        "name": "Дистанция последней тренировки"
+      },
+      "last_activity_calories": {
+        "name": "Калории последней тренировки"
+      },
+      "workouts": {
+        "name": "Тренировок за период"
+      },
+      "relogin_in": {
+        "name": "Повторный вход через, дней"
+      },
+      "fall_asleep_clock": {
+        "name": "Время засыпания"
+      },
+      "wakeup_clock": {
+        "name": "Время пробуждения"
+      },
+      "sleep_duration_clock": {
+        "name": "Сон"
+      },
+      "sleep_deep_clock": {
+        "name": "Глубокий сон"
+      },
+      "sleep_rem_clock": {
+        "name": "Сновидения (REM)"
+      },
+      "sleep_light_clock": {
+        "name": "Поверхностный сон"
+      },
+      "sleep_awake_clock": {
+        "name": "Бодрствование во сне"
+      },
+      "activity_duration_clock": {
+        "name": "Активность за день"
+      },
+      "walking_duration_clock": {
+        "name": "Ходьба за день"
+      },
+      "last_activity_duration_clock": {
+        "name": "Длительность последней тренировки"
+      }
     }
   }
 }

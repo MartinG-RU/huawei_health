@@ -1,0 +1,34 @@
+export_gpx:
+  name: Export workout GPS to GPX
+  description: Export recorded workouts for one day to private local GPX files. No external upload.
+  fields:
+    day:
+      name: Day
+      description: Calendar date, for example 2026-11-10.
+      required: true
+      example: '2026-11-10'
+      selector:
+        text:
+    entry_id:
+      name: Account entry ID
+      description: Optional when exactly one Huawei Health account is loaded.
+      selector:
+        text:
+
+export_tcx:
+  name: Export workout GPS to TCX
+  description: Export recorded workouts for one day to private local TCX files. No external upload.
+  fields:
+    day:
+      name: Day
+      description: Calendar date, for example 2026-11-10.
+      required: true
+      example: '2026-11-10'
+      selector:
+        text:
+    entry_id:
+      name: Account entry ID
+      description: Optional when exactly one Huawei Health account is loaded.
+      selector:
+        text:
+
