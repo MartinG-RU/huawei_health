@@ -1,0 +1,486 @@
+{
+  "5": [
+    "Walk",
+    "Walk"
+  ],
+  "4": [
+    "Run",
+    "Run"
+  ],
+  "2": [
+    "Hike",
+    "Climb Hill"
+  ],
+  "118": [
+    "TrailRun",
+    "Cross Country Race"
+  ],
+  "282": [
+    "Hike",
+    "Hiking"
+  ],
+  "281": [
+    "Walk",
+    "Indoor Walking"
+  ],
+  "283": [
+    "Workout",
+    "Rope Skipping"
+  ],
+  "102": [
+    "Swim",
+    "Swim"
+  ],
+  "104": [
+    "Swim",
+    "Open Area Swim"
+  ],
+  "3": [
+    "Ride",
+    "Bike"
+  ],
+  "117": [
+    "Workout",
+    "Other Sport"
+  ],
+  "109": [
+    "Basketball",
+    "Basketball"
+  ],
+  "512": [
+    "Workout",
+    "Triathlon"
+  ],
+  "101": [
+    "Run",
+    "Treadmill"
+  ],
+  "112": [
+    "Rowing",
+    "Row Machine"
+  ],
+  "111": [
+    "Elliptical",
+    "Cross Trainer"
+  ],
+  "103": [
+    "Ride",
+    "Indoor Bike"
+  ],
+  "1": [
+    "StairStepper",
+    "Climb Stairs"
+  ],
+  "263": [
+    "Golf",
+    "Golf"
+  ],
+  "113": [
+    "StairStepper",
+    "Tread Machine"
+  ],
+  "105": [
+    "TableTennis",
+    "Pingpong"
+  ],
+  "106": [
+    "Badminton",
+    "Badminton"
+  ],
+  "107": [
+    "Tennis",
+    "Tennis"
+  ],
+  "110": [
+    "Workout",
+    "Volleyball"
+  ],
+  "116": [
+    "WeightTraining",
+    "Body Building"
+  ],
+  "114": [
+    "Yoga",
+    "Yoga"
+  ],
+  "151": [
+    "Workout",
+    "Karate"
+  ],
+  "115": [
+    "Pilates",
+    "Pilates"
+  ],
+  "140": [
+    "WeightTraining",
+    "Strength Training"
+  ],
+  "141": [
+    "Ride",
+    "Spinning"
+  ],
+  "142": [
+    "Workout",
+    "Stroll Machine"
+  ],
+  "143": [
+    "HighIntensityIntervalTraining",
+    "Hllt"
+  ],
+  "144": [
+    "Workout",
+    "Group Calisthenics"
+  ],
+  "145": [
+    "Crossfit",
+    "Cross Fit"
+  ],
+  "146": [
+    "Workout",
+    "Functional Training"
+  ],
+  "147": [
+    "Workout",
+    "Physical Training"
+  ],
+  "148": [
+    "Workout",
+    "Taekwondo"
+  ],
+  "149": [
+    "Workout",
+    "Boxing"
+  ],
+  "150": [
+    "Workout",
+    "Free Sparring"
+  ],
+  "152": [
+    "Workout",
+    "Fencing"
+  ],
+  "153": [
+    "Dance",
+    "Belly Dance"
+  ],
+  "154": [
+    "Dance",
+    "Jazz"
+  ],
+  "155": [
+    "Dance",
+    "Latin"
+  ],
+  "156": [
+    "Dance",
+    "Ballet"
+  ],
+  "157": [
+    "Workout",
+    "Core Training"
+  ],
+  "158": [
+    "Workout",
+    "Body Combat"
+  ],
+  "159": [
+    "Workout",
+    "Kendo"
+  ],
+  "160": [
+    "Workout",
+    "Horizontal Bar"
+  ],
+  "161": [
+    "Workout",
+    "Parallel Bar"
+  ],
+  "179": [
+    "Workout",
+    "Billiards"
+  ],
+  "180": [
+    "Workout",
+    "Bowling"
+  ],
+  "181": [
+    "Workout",
+    "Shuttlecock"
+  ],
+  "182": [
+    "Workout",
+    "Handball"
+  ],
+  "183": [
+    "Workout",
+    "Baseball"
+  ],
+  "184": [
+    "Workout",
+    "Softball"
+  ],
+  "185": [
+    "Cricket",
+    "Cricket"
+  ],
+  "186": [
+    "Workout",
+    "Rugby"
+  ],
+  "187": [
+    "Workout",
+    "Beach Soccer"
+  ],
+  "188": [
+    "Workout",
+    "Beach Volleyball"
+  ],
+  "189": [
+    "Workout",
+    "Gateball"
+  ],
+  "190": [
+    "Workout",
+    "Hockey"
+  ],
+  "191": [
+    "Squash",
+    "Squash"
+  ],
+  "192": [
+    "Workout",
+    "Sepaktakraw"
+  ],
+  "193": [
+    "Workout",
+    "Dodge Ball"
+  ],
+  "162": [
+    "Dance",
+    "Hiphop"
+  ],
+  "163": [
+    "InlineSkate",
+    "Roller Skating"
+  ],
+  "164": [
+    "Workout",
+    "Martial"
+  ],
+  "165": [
+    "Dance",
+    "Square Dance"
+  ],
+  "166": [
+    "Workout",
+    "Tai Chi"
+  ],
+  "167": [
+    "Dance",
+    "Dance"
+  ],
+  "168": [
+    "Workout",
+    "Hula Hoop"
+  ],
+  "169": [
+    "Workout",
+    "Frisbee"
+  ],
+  "170": [
+    "Workout",
+    "Darts"
+  ],
+  "171": [
+    "Workout",
+    "Archery"
+  ],
+  "172": [
+    "Workout",
+    "Horse Riding"
+  ],
+  "173": [
+    "Workout",
+    "Hunting"
+  ],
+  "174": [
+    "Workout",
+    "Fly Kite"
+  ],
+  "175": [
+    "Workout",
+    "Tug War"
+  ],
+  "176": [
+    "Workout",
+    "Swing"
+  ],
+  "178": [
+    "Workout",
+    "Obstacle Race"
+  ],
+  "196": [
+    "Workout",
+    "Fishing"
+  ],
+  "194": [
+    "Sail",
+    "Sailboat"
+  ],
+  "195": [
+    "Surfing",
+    "Surfing"
+  ],
+  "197": [
+    "Workout",
+    "Drifting"
+  ],
+  "198": [
+    "Workout",
+    "Dragon Boat"
+  ],
+  "199": [
+    "Canoeing",
+    "Canoeing"
+  ],
+  "200": [
+    "Rowing",
+    "Rowing"
+  ],
+  "201": [
+    "Workout",
+    "Motorboat"
+  ],
+  "202": [
+    "StandUpPaddling",
+    "Sup"
+  ],
+  "203": [
+    "IceSkate",
+    "Skating"
+  ],
+  "204": [
+    "Workout",
+    "Ice Hockey"
+  ],
+  "205": [
+    "Workout",
+    "Curling"
+  ],
+  "206": [
+    "Workout",
+    "Snow Mobile"
+  ],
+  "207": [
+    "Workout",
+    "Sled"
+  ],
+  "208": [
+    "Workout",
+    "Biathlon"
+  ],
+  "209": [
+    "Skateboard",
+    "Skateboard"
+  ],
+  "210": [
+    "RockClimbing",
+    "Rock Climb"
+  ],
+  "211": [
+    "Workout",
+    "Bungee Jump"
+  ],
+  "212": [
+    "Workout",
+    "Parkour"
+  ],
+  "213": [
+    "Workout",
+    "Bmx"
+  ],
+  "214": [
+    "Workout",
+    "Orienteering"
+  ],
+  "215": [
+    "Workout",
+    "Parachute"
+  ],
+  "216": [
+    "Workout",
+    "Race"
+  ],
+  "217": [
+    "AlpineSki",
+    "Ski"
+  ],
+  "218": [
+    "Snowboard",
+    "Skate Board"
+  ],
+  "219": [
+    "NordicSki",
+    "Cross Ski"
+  ],
+  "220": [
+    "Golf",
+    "Golf Driving"
+  ],
+  "222": [
+    "Workout",
+    "Oal"
+  ],
+  "223": [
+    "Workout",
+    "E Sports"
+  ],
+  "224": [
+    "Padel",
+    "Padel"
+  ],
+  "108": [
+    "Soccer",
+    "Football"
+  ],
+  "286": [
+    "Golf",
+    "Golf Course"
+  ],
+  "10001": [
+    "Workout",
+    "Fitness"
+  ],
+  "0": [
+    "Workout",
+    "Default"
+  ],
+  "287": [
+    "Workout",
+    "Free Diving"
+  ],
+  "288": [
+    "Workout",
+    "Breath Holding Training"
+  ],
+  "289": [
+    "Workout",
+    "Breath Holding Test"
+  ],
+  "290": [
+    "Workout",
+    "Somatosensory Movement"
+  ],
+  "291": [
+    "Workout",
+    "Scuba Diving"
+  ],
+  "226": [
+    "Wheelchair",
+    "Wheelchair"
+  ],
+  "227": [
+    "Run",
+    "Marathon Race"
+  ]
+}

@@ -1,16 +1,4 @@
-"""Sync client for the Huawei Health app cloud.
-
-Nothing here touches Home Assistant: the whole module is stdlib and blocking, so the
-coordinator can run it in an executor job. It is a direct port of the protocol recovered
-from Huawei Health 16.1.6.320 and verified against the live RU cloud, including the traps
-that cost the most time to find:
-
-* the token is a JSON *body* field, and the app also sends it in ``Authorization`` and
-  ``x-token`` - the cloud accepts the pair only when it is presented that way;
-* ``*Stat`` endpoints take YYYYMMDD integers while ``*ByTime`` ones take the same or epoch
-  milliseconds, and epoch *seconds* are rejected everywhere;
-* every ``*ByTime`` window is capped at ten calendar days.
-"""
+"""Blocking client for Huawei Health cloud API. Run network calls in an executor."""
 
 from __future__ import annotations
 
@@ -24,8 +12,8 @@ import urllib.parse
 import urllib.request
 import uuid
 from dataclasses import dataclass, field
-from datetime import date, datetime, timedelta
-from typing import Any, Callable, Iterable, Iterator
+from datetime import UTC, date, datetime, timedelta
+from typing import Any, Callable, Final, Iterable, Iterator
 
 from .const import (
     APP_HOSTS,
@@ -121,6 +109,26 @@ def _from_ymd(digits: str) -> date | None:
     try:
         return datetime.strptime(digits, "%Y%m%d").date()
     except ValueError:
+        return None
+
+
+def epoch_to_datetime(raw: Any) -> datetime | None:
+    """An epoch stamp as a tz-aware datetime.
+
+    The sleep bounds arrive in epoch *milliseconds*; a seconds-scale stamp is accepted
+    too rather than silently dropped. ``0`` and ``-1`` mean "never measured", not a
+    moment in 1970, so anything non-positive reads as absent. The result is UTC aware
+    because Home Assistant's timestamp sensors require that and render it in the
+    user's own zone.
+    """
+    value = to_float(raw)
+    if not value or value <= 0:
+        return None
+    if value > 1e11:  # milliseconds; seconds stay below that until the year 5138
+        value /= 1000
+    try:
+        return datetime.fromtimestamp(value, UTC)
+    except (OverflowError, OSError, ValueError):
         return None
 
 
@@ -265,7 +273,7 @@ def authorization_code_from(answer: str) -> str | None:
 
 
 def _session_headers(tokens: Tokens, uid: str | None = None) -> dict[str, str]:
-    """ThirdPartyHttpUtils.getHeader(): x-ts + x-version, and x-huid when it is known."""
+    """Build timestamp, version and optional account identity headers."""
     headers = {
         "x-ts": str(int(time.time() * 1000)),
         "x-version": APP_VERSION,
@@ -459,12 +467,7 @@ class HuaweiHealthClient:
 
     # ── transport ────────────────────────────────────────────────────────
     def _headers(self) -> dict[str, str]:
-        """The same token, presented three ways, plus the identity headers.
-
-        Suggestion_CloudFactory/gkp.java in the APK sends body token + Authorization +
-        x-token together and the cloud accepts it; x-huid alone is enough to make a
-        device-bound route answer 20010004 for the wrong pair.
-        """
+        """Build authentication headers for Huawei Health API requests."""
         headers = {
             "Content-Type": "application/json;charset=UTF-8",
             "Accept-Encoding": "identity",
@@ -593,12 +596,15 @@ class HuaweiHealthClient:
         return daily_activity(response.get("sportStat") or [])
 
     def sessions(self, days: int = 7) -> list[dict]:
-        """Recorded workouts, rebuilt from the per-minute segments the cloud stores."""
+        """Recorded MotionPath workouts; no fallback to background activity."""
+        from .motion_workouts import PATH, shape
         end = day_int(date.today())
         start = day_int(date.today() - timedelta(days=max(days, 1) - 1))
-        records = self._by_time_range(
-            lambda a, b: self.sports_detail(a, b, SESSION_SPORT_TYPES), start, end)
-        return sport_sessions(records)
+        answers = []
+        for a, b in day_windows(start, end):
+            answers.append(self.post(PATH, {"startTime": a, "endTime": b,
+                                            "queryType": 1, "dataType": 2}))
+        return shape(answers)
 
     def health_summary(self, days: int = 3,
                        types: Iterable[int] = (7, 9, 11, 12)) -> list[dict]:
@@ -694,6 +700,11 @@ HEALTH_FAMILIES = {
 }
 
 
+#: The two ends of a night. Unlike the counters next to them these are epoch stamps,
+#: not durations, so they take their own path through health_series().
+SLEEP_BOUNDS: Final = (("fallAsleepTime", "fall_asleep"), ("wakeupTime", "wakeup"))
+
+
 def health_series(payload: dict) -> list[dict]:
     """Per-day health metrics, whatever families the account's devices fill."""
     rows: dict[str, dict] = {}
@@ -713,12 +724,10 @@ def health_series(payload: dict) -> list[dict]:
                     row[name] = got
             if block == "professionalSleep":
                 # A night belongs to the day it woke up in, so carry its real bounds.
-                for key, name in (("fallAsleepTime", "fall_asleep"),
-                                  ("wakeupTime", "wakeup")):
-                    stamp = to_float(values.get(key))
-                    if stamp and stamp > 1e12:
-                        row[name] = datetime.fromtimestamp(stamp / 1000).strftime(
-                            "%Y-%m-%d %H:%M")
+                for key, name in SLEEP_BOUNDS:
+                    moment = epoch_to_datetime(values.get(key))
+                    if moment is not None:
+                        row[name] = moment
     return [rows[key] for key in sorted(rows)]
 
 
@@ -752,6 +761,12 @@ def sport_sessions(records: Iterable[dict], gap_minutes: int = 15) -> list[dict]
             basic = entry["basic"]
             start, end = entry["start_ms"], entry["end_ms"]
             duration = to_int(basic.get("duration")) or 0
+            # Preserve the values as received per segment. Their units and aggregation
+            # semantics are not established, so neither sum them nor call them ascent.
+            sample = {key: basic[key] for key in ("altitude", "floor")
+                      if basic.get(key) is not None}
+            if sample:
+                sample["start"] = _stamp(start).isoformat()
             if (sessions and sessions[-1]["sport_type"] == sport_type
                     and start - sessions[-1]["end_ms"] <= gap_minutes * 60000):
                 last = sessions[-1]
@@ -761,6 +776,8 @@ def sport_sessions(records: Iterable[dict], gap_minutes: int = 15) -> list[dict]
                 last["distance_m"] += to_int(basic.get("distance")) or 0
                 last["kcal"] += (to_float(basic.get("calorie")) or 0) / 1000
                 last["segments"] += 1
+                if sample:
+                    last.setdefault("altitude_floor_samples", []).append(sample)
                 continue
             sessions.append({
                 "sport_type": sport_type,
@@ -772,6 +789,8 @@ def sport_sessions(records: Iterable[dict], gap_minutes: int = 15) -> list[dict]
                 "segments": 1,
                 "device_code": entry["device_code"],
             })
+            if sample:
+                sessions[-1]["altitude_floor_samples"] = [sample]
     for session in sessions:
         session["start"] = _stamp(session.pop("start_ms"))
         session["end"] = _stamp(session.pop("end_ms"))

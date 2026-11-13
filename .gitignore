@@ -1,8 +1,9 @@
 __pycache__/
 *.py[cod]
-.venv/
-venv/
-.idea/
-.vscode/
-.DS_Store
-huawei_health.zip
+.storage/
+.env
+*.log
+*.gpx
+*.tcx
+*.fit
+secrets.yaml

@@ -42,6 +42,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await data.coordinator.async_config_entry_first_refresh()
 
     entry.runtime_data = data
+    from .gps_export import register
+    register(hass)
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     entry.async_on_unload(entry.add_update_listener(_async_entry_updated))
     return True
@@ -97,13 +99,17 @@ def _save_tokens(hass: HomeAssistant, entry: ConfigEntry, tokens: Tokens) -> Non
     _LOGGER.debug("Stored the rotated Huawei Health token for %s", entry.title)
 
 
-@callback
-def _async_entry_updated(hass: HomeAssistant, entry: ConfigEntry) -> None:
-    """Reload on an options change only - token saves land on the same listener."""
+async def _async_entry_updated(hass: HomeAssistant, entry: ConfigEntry) -> None:
+    """Reload on an options change only - token saves land on the same listener.
+
+    HA wraps an update listener in ``async_create_task``, which needs a coroutine:
+    a plain ``@callback`` function returns None and the save job dies with
+    "TypeError: a coroutine was expected, got None".
+    """
     data: HuaweiHealthData | None = getattr(entry, "runtime_data", None)
     if data is None or dict(entry.options) == data.options:
         return
-    hass.async_create_task(hass.config_entries.async_reload(entry.entry_id))
+    await hass.config_entries.async_reload(entry.entry_id)
 
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
